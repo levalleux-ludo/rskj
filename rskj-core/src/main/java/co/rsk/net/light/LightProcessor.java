@@ -10,6 +10,7 @@ import org.ethereum.core.Blockchain;
 import org.ethereum.core.Transaction;
 import org.ethereum.core.TransactionReceipt;
 import org.ethereum.db.TransactionInfo;
+import co.rsk.net.light.messages.TransactionIdResponseMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,5 +58,8 @@ public class LightProcessor {
 
     public void processBlockReceiptsResponse(MessageChannel sender, BlockReceiptsResponseMessage message) {
         throw new UnsupportedOperationException();
+    }
+    public void processTransactionIdResponseMessage(MessageChannel sender, TransactionIdResponseMessage message) {
+        logger.debug("transactionID response Message Recieved");
     }
 }
