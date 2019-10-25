@@ -40,7 +40,6 @@ public class NodeMessageHandlerUtil {
                 mock(Genesis.class));
         NodeBlockProcessor processor = new NodeBlockProcessor(store, blockchain, nodeInformation, blockSyncService, syncConfiguration);
         LightProcessor lightProcessor = new LightProcessor(blockchain, blockSyncService);
-
         return new NodeMessageHandler(config, processor, syncProcessor, lightProcessor, new SimpleChannelManager(), null, RskMockFactory.getPeerScoringManager(), validationRule, mock(StatusResolver.class));
     }
 

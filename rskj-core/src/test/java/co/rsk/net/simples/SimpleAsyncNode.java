@@ -147,7 +147,6 @@ public class SimpleAsyncNode extends SimpleNode {
                 mock(Genesis.class)
         );
         NodeMessageHandler handler = new NodeMessageHandler(config, processor, syncProcessor, lightProcessor, channelManager, null, peerScoringManager, blockValidationRule, mock(StatusResolver.class));
-
         return new SimpleAsyncNode(handler, blockchain, syncProcessor, channelManager);
     }
 
