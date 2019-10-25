@@ -20,6 +20,7 @@ import org.ethereum.db.ReceiptStore;
 import org.ethereum.db.TransactionInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.annotation.Nonnull;
 import java.math.BigInteger;
@@ -79,9 +80,7 @@ public class LightProcessor {
         TransactionInfo txinfo = blockchain.getTransactionInfo(hash);
 
         if (txinfo == null) {
-            byte[] empty = new byte[0];
-            TransactionIndexResponseMessage response = new TransactionIndexResponseMessage(message.getId(),empty,empty,empty);
-            sender.sendMessage(response);
+            // Don't waste time sending an empty response.
             return;
         }
 
@@ -99,5 +98,6 @@ public class LightProcessor {
         logger.debug("BlockHash: "+ Hex.toHexString(message.getBlockHash()));
         logger.debug("Blocknumber: "+Hex.toHexString(message.getBlockNumber()));
         logger.debug("TxIndex: "+Hex.toHexString(message.getTxIndex()));
+        throw new NotImplementedException();
     }
 }
