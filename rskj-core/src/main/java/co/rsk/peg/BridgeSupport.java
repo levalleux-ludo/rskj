@@ -50,6 +50,7 @@ import org.ethereum.vm.PrecompiledContracts;
 import org.ethereum.vm.program.Program;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sun.rmi.server.Activation;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -143,6 +144,11 @@ public class BridgeSupport {
             checkpoints = BridgeSupport.class.getResourceAsStream("/" + bridgeConstants.getBtcParams().getId() + ".checkpoints");
         }
         return checkpoints;
+    }
+
+    @VisibleForTesting
+    ActivationConfig.ForBlock getActivations() {
+        return this.activations;
     }
 
     public void save() throws IOException {
