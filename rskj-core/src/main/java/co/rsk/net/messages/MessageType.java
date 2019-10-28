@@ -283,9 +283,14 @@ public enum MessageType {
             byte[] rlpId = list.get(0).getRLPData();
             long id = rlpId == null ? 0 : BigIntegers.fromUnsignedByteArray(rlpId).longValue();
 
-            byte[] blockNumber = message.get(0).getRLPData();
+            byte[] blockNumberRLP = message.get(0).getRLPData();
+            long blockNumber = blockNumberRLP == null ? 0 : BigIntegers.fromUnsignedByteArray(blockNumberRLP).longValue();
+
             byte[] blockHash = message.get(1).getRLPData();
-            byte[] txIndex = message.get(2).getRLPData();
+
+            byte[] rlpTx = message.get(2).getRLPData();
+            long txIndex = rlpTx == null ? 0 : BigIntegers.fromUnsignedByteArray(rlpTx).longValue();
+
             return new TransactionIndexResponseMessage(id, blockNumber,blockHash,txIndex);
         }
     };

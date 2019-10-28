@@ -13,10 +13,7 @@ import org.ethereum.db.TransactionInfo;
 import co.rsk.net.light.messages.TransactionIndexRequestMessage;
 import co.rsk.net.light.messages.TransactionIndexResponseMessage;
 import org.bouncycastle.util.encoders.Hex;
-import org.ethereum.core.Block;
 import org.ethereum.core.Blockchain;
-import org.ethereum.core.Transaction;
-import org.ethereum.db.ReceiptStore;
 import org.ethereum.db.TransactionInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,8 +71,8 @@ public class LightProcessor {
         byte[] hash = message.getHash();
 
         byte[] blockHash;
-        byte[] blockNumber;
-        byte[] txIndex;
+        long blockNumber;
+        long txIndex;
 
         TransactionInfo txinfo = blockchain.getTransactionInfo(hash);
 
@@ -85,8 +82,8 @@ public class LightProcessor {
         }
 
         blockHash = txinfo.getBlockHash();
-        blockNumber = BigInteger.valueOf(blockchain.getBlockByHash(blockHash).getNumber()).toByteArray();
-        txIndex = BigInteger.valueOf(txinfo.getIndex()).toByteArray();
+        blockNumber = blockchain.getBlockByHash(blockHash).getNumber();
+        txIndex = txinfo.getIndex();
 
         TransactionIndexResponseMessage response = new TransactionIndexResponseMessage(message.getId(),blockNumber,blockHash,txIndex);
         sender.sendMessage(response);
@@ -94,10 +91,10 @@ public class LightProcessor {
 
     public void processTransactionIndexResponseMessage(MessageChannel sender, TransactionIndexResponseMessage message) {
         logger.debug("transactionIndex response Message Recieved");
-        logger.debug("ID: "+message.getId());
-        logger.debug("BlockHash: "+ Hex.toHexString(message.getBlockHash()));
-        logger.debug("Blocknumber: "+Hex.toHexString(message.getBlockNumber()));
-        logger.debug("TxIndex: "+Hex.toHexString(message.getTxIndex()));
+        logger.debug("ID: " + message.getId());
+        logger.debug("BlockHash: " + Hex.toHexString(message.getBlockHash()));
+        logger.debug("Blocknumber: " + message.getBlockNumber());
+        logger.debug("TxIndex: " + message.getTxIndex());
         throw new NotImplementedException();
     }
 }

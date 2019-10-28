@@ -18,7 +18,6 @@
 
 package co.rsk.net.light.messages;
 
-import co.rsk.net.messages.Message;
 import co.rsk.net.messages.MessageType;
 import co.rsk.net.messages.MessageVisitor;
 import co.rsk.net.messages.MessageWithId;

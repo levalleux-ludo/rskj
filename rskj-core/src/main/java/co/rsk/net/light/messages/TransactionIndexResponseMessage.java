@@ -24,17 +24,19 @@ import co.rsk.net.messages.MessageVisitor;
 import co.rsk.net.messages.MessageWithId;
 import org.ethereum.util.RLP;
 
+import java.math.BigInteger;
+
 /**
  * Created by Sebastian Sicardi on 22/10/2019.
  */
 
 public class TransactionIndexResponseMessage extends MessageWithId {
     private long id;
-    private byte[] blockNumber;
+    private long blockNumber;
     private byte[] blockHash;
-    private byte[] txIndex;
+    private long txIndex;
 
-    public TransactionIndexResponseMessage(long id, byte[] blockNumber, byte[] blockHash, byte[] txIndex) {
+    public TransactionIndexResponseMessage(long id, long blockNumber, byte[] blockHash, long txIndex) {
         this.id = id;
         this.blockNumber = blockNumber;
         this.blockHash = blockHash;
@@ -45,27 +47,19 @@ public class TransactionIndexResponseMessage extends MessageWithId {
     public MessageType getMessageType() { return MessageType.TRANSACTION_INDEX_RESPONSE_MESSAGE; }
 
     @Override
-    public long getId() {
-        return this.id;
-    }
+    public long getId() { return this.id; }
 
-    public byte[] getBlockNumber() {
-        return blockNumber;
-    }
+    public long getBlockNumber() { return blockNumber; }
 
-    public byte[] getBlockHash() {
-        return blockHash;
-    }
+    public byte[] getBlockHash() { return blockHash; }
 
-    public byte[] getTxIndex() {
-        return txIndex;
-    }
+    public long getTxIndex() { return txIndex; }
 
     @Override
     public byte[] getEncodedMessageWithoutId() {
         byte[] rlpBlockHash = RLP.encodeElement(this.blockHash);
-        byte[] rlpBlockNumber = RLP.encodeElement(this.blockNumber);
-        byte[] rlpTxIndex = RLP.encodeElement(this.txIndex);
+        byte[] rlpBlockNumber = RLP.encodeBigInteger(BigInteger.valueOf(this.blockNumber));
+        byte[] rlpTxIndex = RLP.encodeBigInteger((BigInteger.valueOf(this.txIndex)));
 
         return RLP.encodeList(rlpBlockHash, rlpBlockNumber,rlpTxIndex);
     }
