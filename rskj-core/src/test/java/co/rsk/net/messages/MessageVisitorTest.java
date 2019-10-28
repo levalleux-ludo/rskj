@@ -3,6 +3,7 @@ package co.rsk.net.messages;
 import co.rsk.config.RskSystemProperties;
 import co.rsk.crypto.Keccak256;
 import co.rsk.net.*;
+import co.rsk.net.light.LightProcessor;
 import co.rsk.scoring.EventType;
 import co.rsk.scoring.PeerScoringManager;
 import co.rsk.validators.BlockValidationRule;
@@ -34,6 +35,7 @@ public class MessageVisitorTest {
     private TransactionGateway transactionGateway;
     private SyncProcessor syncProcessor;
     private BlockProcessor blockProcessor;
+    private LightProcessor lightProcessor;
     private RskSystemProperties config;
 
     @Before
@@ -46,11 +48,13 @@ public class MessageVisitorTest {
         channelManager = mock(ChannelManager.class);
         blockValidationRule = mock(BlockValidationRule.class);
         sender = mock(MessageChannel.class);
+        lightProcessor = mock(LightProcessor.class);
 
         target = new MessageVisitor(
                 config,
                 blockProcessor,
                 syncProcessor,
+                lightProcessor,
                 transactionGateway,
                 peerScoringManager,
                 channelManager,
@@ -251,6 +255,30 @@ public class MessageVisitorTest {
 
         verify(syncProcessor, times(1))
                 .processBlockResponse(eq(sender), eq(message));
+    }
+
+    @Test
+    public void blockReceiptsRequestMessage() {
+        BlockReceiptsRequestMessage message = mock(BlockReceiptsRequestMessage.class);
+        byte[] blockHash = new byte[]{0x0F};
+
+        when(message.getBlockHash()).thenReturn(blockHash);
+        when(message.getId()).thenReturn(24L);
+
+        target.apply(message);
+
+        verify(lightProcessor, times(1))
+                .processBlockReceiptsRequest(eq(sender), eq(24L), eq(blockHash));
+    }
+
+    @Test
+    public void blockReceiptsResponseMessage() {
+        BlockReceiptsResponseMessage message = mock(BlockReceiptsResponseMessage.class);
+
+        target.apply(message);
+
+        verify(lightProcessor, times(1))
+                .processBlockReceiptsResponse(eq(sender), eq(message));
     }
 
     @Test
